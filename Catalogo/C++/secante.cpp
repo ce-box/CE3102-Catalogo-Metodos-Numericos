@@ -39,17 +39,37 @@ double calcular_error(double x_k){
 
 
 /**
- * 
+ * @brief Determina si se cumple alguna de las condiciones de parada
+ * del método iterativo. (1) Se consigue un valor de tolerancia dado.
+ * (2) El denominador se aproxima demasiado a cero.
+ * @param x_k Valor actual de la sucesión.
+ * @param x_prev Valor anterior de la sucesión x_(k-1).
+ * @param tol Valor de tolerancia.
+ * @return Verdadero si se cumple alguna condición, falso si no.
  */ 
 bool condicion_parada(double x_k, double x_prev, double tol){
-    if (calcular_error(x_k) < tol) return true;
-    else if ((f(x_k) - f(x_prev)) < 10e-8) return true;
+    double val = 10e-8;
+    if (calcular_error(x_k) < tol){
+        cout << "Cae por tol" << endl;
+        return true;
+    }
+    else if (abs(f(x_k) - f(x_prev)) < val) {
+        cout << "Cae por indefinición" << endl;
+        return true;
+    }
     else return false;
 }
 
 
 /**
- * 
+ * @brief Permite encontrar los ceros de una función f(x) de forma iterativa
+ * aplicando el método de la secante.
+ * @param x_0 Valor de la condición inicial x_0.
+ * @param x_1 Valor de la condición inicial x_1.
+ * @param tol Valor de la tolerancia de resultado aceptable.
+ * @param max_itr Cantidad máxima de iteraciones que se pueden realizar.
+ * @return Retorna el valor de la aproximación y un vector con los errores
+ * obtenidos en cada iteración.
  */ 
 tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int max_itr=100){
 
@@ -58,8 +78,6 @@ tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int ma
     int k = 1;
 
     while (!condicion_parada(x_k, x_prev, tol) || k > max_itr){
-        cout << "x_k = " << x_k << endl;
-        cout << "x_k-1 = " << x_prev << endl;
         x_sgt = calcular_sgte_valor(x_k, x_prev);
         x_prev = x_k;
         x_k = x_sgt;
@@ -74,10 +92,11 @@ tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int ma
 
 int main(int argc, char const *argv[])
 {
-    tuple<double, vector<double>> r = secante(0.75, 0.5, 0.00001);
+    tuple<double, vector<double>> r = secante(0.75, 0.5, 10e-8,4);
 
     // Resultado
     cout << "aprox:: " << get<0>(r) << endl;
+    cout << "k:: " << get<1>(r).size() << endl;
 
     return 0;
 }
