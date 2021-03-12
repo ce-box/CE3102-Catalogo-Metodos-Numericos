@@ -5,15 +5,22 @@
 
 using namespace std;
 
-
+/**
+ * @brief Función no lineal a la que deseamos encontrar solución.
+ * @param x Variable independiente (Real).
+ * @return Retorna el resultado de evaluar f(x).
+ */ 
 double f(double x){
     // f(x) = cos²(2x) - x²
-    return pow(cos(2*x),2)- pow(x,2); 
+    return pow(cos(2*x), 2) - pow(x,2); 
 }
 
 
 /**
- * 
+ * @brief Calcula el siguiente valor de la sucesión.
+ * @param x_k Valor actual de la sucesión.
+ * @param x_prev Valor anterior de la sucesión x_(k-1).
+ * @return Retorna el siguiente valor de la sucesión x_(k+1).
  */ 
 double calcular_sgte_valor(double x_k, double x_prev){
     return x_k - ((x_k - x_prev)* f(x_k))/(f(x_k) - f(x_prev));
@@ -21,7 +28,10 @@ double calcular_sgte_valor(double x_k, double x_prev){
 
 
 /**
- * 
+ * @brief Calcula el error de la aproximación obtenida. 
+ * Entre más cercana a f(x)=0, mejor es la aproximación.
+ * @param x_k Valor de la solución apróximada.
+ * @return Retorna el resultado en valor absoluto se evaluar f(x_k). 
  */ 
 double calcular_error(double x_k){
     return abs(f(x_k));
@@ -48,6 +58,8 @@ tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int ma
     int k = 1;
 
     while (!condicion_parada(x_k, x_prev, tol) || k > max_itr){
+        cout << "x_k = " << x_k << endl;
+        cout << "x_k-1 = " << x_prev << endl;
         x_sgt = calcular_sgte_valor(x_k, x_prev);
         x_prev = x_k;
         x_k = x_sgt;
@@ -62,7 +74,7 @@ tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int ma
 
 int main(int argc, char const *argv[])
 {
-    tuple<double, vector<double>> r = secante(3/4, 1/2, 0.00001);
+    tuple<double, vector<double>> r = secante(0.75, 0.5, 0.00001);
 
     // Resultado
     cout << "aprox:: " << get<0>(r) << endl;
