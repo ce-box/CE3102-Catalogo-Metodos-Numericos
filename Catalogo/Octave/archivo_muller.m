@@ -5,19 +5,21 @@ function archivo_muller
   x0=2;
   x1=2.2;
   x2=1.8;;
-  iterMax=2;
+  iterMax=5;
   
-  muller(f,x0,x1,x2,4);
+  muller(f,x0,x1,x2,iterMax,-0.1);
 
 end
 
 
-function muller(f,x0,x1,x2,iterMax)
+function muller(f,x0,x1,x2,iterMax,tol)
   pkg load symbolic
   syms x
   f1=sym(f);%convierte el Texto en  simbolico
   f=matlabFunction(f1);
-  while(iterMax>0)
+  e=[]
+  con=0;
+  while(con<iterMax)
     lista1=[]
     val=[];
     a=[];
@@ -45,11 +47,24 @@ function muller(f,x0,x1,x2,iterMax)
     x1=t1;
     x2=t2;
 
-    iterMax=iterMax-1;
+    
+    if(abs(f(r))<tol)
+      break;
+    else
+      e=[e abs(f(r))]
+      con=con+1;
+    end
     clc;
   end
+    clc;
     display(['-------------'])
-    display(['la aproximacion R=' num2str(r)]) 
+    display(['la aproximacion R=' num2str(r)])
+    display(['la aproximacion R=' num2str(con)])
+    display(['la aproximacion R=' num2str(e)])
+    plot(1:con,e);%Se muestra la grafica de ERROR VS Iteraciones de la funcion
+    title ("Muller error vs iteraciones");
+    xlabel("Iteraciones");
+    ylabel("Error");
 end
 function [r]=resolver(matr,val,x0,x1,x2)
   resultado=[];
