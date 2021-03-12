@@ -49,14 +49,8 @@ double calcular_error(double x_k){
  */ 
 bool condicion_parada(double x_k, double x_prev, double tol){
     double val = 10e-8;
-    if (calcular_error(x_k) < tol){
-        cout << "Cae por tol" << endl;
-        return true;
-    }
-    else if (abs(f(x_k) - f(x_prev)) < val) {
-        cout << "Cae por indefinición" << endl;
-        return true;
-    }
+    if (calcular_error(x_k) < tol) return true;             // El ciclo para porque se alcanzo el nivel de tolerancia. 
+    else if (abs(f(x_k) - f(x_prev)) < val) return true;    // El ciclo se interrumpe porque el denominador se acercó demasiado a cero.
     else return false;
 }
 
@@ -78,10 +72,10 @@ tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int ma
     int k = 1;
 
     while (!condicion_parada(x_k, x_prev, tol) || k > max_itr){
-        x_sgt = calcular_sgte_valor(x_k, x_prev);
-        x_prev = x_k;
-        x_k = x_sgt;
-        error.push_back(calcular_error(x_k));
+        x_sgt = calcular_sgte_valor(x_k, x_prev);   // Calcula el valor para x_(k+1).
+        x_prev = x_k;                               // Asigna a x_(k-1) = x_k.
+        x_k = x_sgt;                                // Asigna a x_k = x_(k+1).
+        error.push_back(calcular_error(x_k));       // Agrega el error al vector.
         k++;
     }
 
