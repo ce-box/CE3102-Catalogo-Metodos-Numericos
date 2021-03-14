@@ -69,27 +69,18 @@ end
 function [r]=resolver(matr,val,x0,x1,x2)%Funcion que obtendra el valor de las variables del sistema de ecuaciones
   resultado=[];
   resultado=inv(matr)*val;%Operacion de matrices que dara como resultado el valor de las variables del sistema de ecuaciones
-  %r=obtenerR(resultado(1),resultado(2),resultado(3),x2); 
-  r=RSymbolic(resultado(1),resultado(2),resultado(3),x2);%Invoca la funcion "" con la finalidad de obtener el valor de R
+  r=obtenerR(resultado(1),resultado(2),resultado(3),x2);%Invoca la funcion "" con la finalidad de obtener el valor de R
 end
 
-
-
-
-
-function [t]=RSymbolic(a1,b1,c1,x2)%Funcion encargada de calcular el valor de r para el metodo
+function [r]=obtenerR(a1,b1,c1,x2)%Funcion encargada de calcular el valor de r para el metodo
   syms x a b c s %Se definen las variables simbolicas
   signo=obtenerSig(b1);%Se llama a la funcion para obtener el simbolo de la variable b
   r='x-((2*c)/(b+s*sqrt((b^2)-4*a*c)))';%Se define como texto la ecuacion para r
   r1=sym(r);%convierte el Texto en  simbolico
-  ff=matlabFunction(r1);%Función f en formato del lenguaje M
-  t=ff(a1,b1,c1,signo,x2);%(a,b,c,s,x)Orden para ingresar las variables y se obtiene el valor de t=r
+  f2=matlabFunction(r1);%Función f en formato del lenguaje M
+  r=f2(a1,b1,c1,signo,x2);%(a,b,c,s,x)Orden para ingresar las variables y se obtiene el valor de t=r
 end
 
-function [r]=obtenerR(a,b,c,x2)%Funcion encargada de calcular el valor de r para el metodo
-  signo=obtenerSig(b);%Se llama a la funcion para obtener el simbolo de la variable b
-  r=x2-((2*c)/(b+signo*sqrt((b^2)-4*a*c)));%se obtiene el valor de r
-end 
 
 function [signo]=obtenerSig(b)%Funcion para obtener el simbolo de la variable b
   signo=0;

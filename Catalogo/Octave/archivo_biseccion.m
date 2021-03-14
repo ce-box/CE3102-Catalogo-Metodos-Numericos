@@ -3,7 +3,7 @@ function archivo_biseccion
   %Ejemplo Numérico
   %P1: Definir parámetros de entrada
   f='exp(x)-x-2';
-  %f='exp(-x)-x'; %a=0 b=1 tol=1*10^-3;
+  %f='exp(-x)-x'; %a=0 b=1 tol=1*10^-3; Otro ejemplo
   a=0;
   b=2;
   tol=10^-4;
