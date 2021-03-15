@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 def punto_fijo(func, rango, tol, iterMax):
 
-    #Funcion de prueba: "E**(-x)" ó "log(3*x)", [-1,2.4], 10**(-10), 100
+    #Funcion de prueba: "E**(-x)" ó "log(3*x)", [1,2], 10**(-10), 100
 
     x = Symbol('x') #Inicializa "x" como símbolo
     f = sympify(func) #Se traduce el string "func" a una función de sympy
@@ -18,7 +18,7 @@ def punto_fijo(func, rango, tol, iterMax):
 
     D = []
     A = []
-
+    
     cont = 1 #Se inicializa contador
 
     try:
