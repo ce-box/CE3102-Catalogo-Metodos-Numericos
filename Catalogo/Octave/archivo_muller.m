@@ -7,23 +7,26 @@ function archivo_muller
   x2=1.8;;
   iterMax=5;
   tol=10^-8;
-  muller(f,x0,x1,x2,iterMax,-0.1);%Argumentos de la funcion muller
+  [r,error]=muller(f,x0,x1,x2,iterMax,tol);%Argumentos de la funcion muller
 
 end
 
 %Funcion que realiza el metodo de biseccion
-%f=funcion
+%f=funcion en formato texto
 %x0 y x0 = los valores iniciales
 %iterMax = el numero total de iteraciones
 %tol = el valor de tolerancia
+%Retorna el valor de la aproximacion "r" y el valor del "error" 
 %Muestra la grafica de error vs iteraciones
-function muller(f,x0,x1,x2,iterMax,tol)
+function [r,error]=muller(f,x0,x1,x2,iterMax,tol)
   pkg load symbolic%Invoca a la libreria symbolic
   syms x%Define a x como simbolica
   f1=sym(f);%convierte el Texto en  simbolico
   f=matlabFunction(f1);%Función f en formato del lenguaje M
   e=[];%La lista donde se almacenaran los valores de error
   con=0;%Contador que ademas llevara el numero de iteraciones
+  r=0;
+  error=0;
   while(con<iterMax)
     lista1=[];#Matriz 3x3 con que contendra los valores del sistema de ecuaciones
     val=[];#Matriz 3x1 que contendra los valores "resultado" de las ecuaciones
@@ -56,7 +59,8 @@ function muller(f,x0,x1,x2,iterMax,tol)
     if(abs(f(r))<tol)%Comprueba si el valor de error es menor a la tolerancia
       break;%Corta el ciclo del while si se cumple la condicion
     else
-      e=[e abs(f(r))];%En caso de no cumplir la condicion se agrega el error a la lista e
+      error = abs(f(r));
+      e=[e error];%En caso de no cumplir la condicion se agrega el error a la lista e
       con=con+1;%Se aumenta el contador para continuar con el ciclo
     end
   end

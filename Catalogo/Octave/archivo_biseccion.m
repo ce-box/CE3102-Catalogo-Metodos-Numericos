@@ -17,6 +17,7 @@ end
 %a y b = variables los valores del intervalo
 %iterMax = el numero total de iteraciones
 %tol = el valor de tolerancia
+%Retorna el valor de aproximacion como "xk" y el valor del error
 %Muestra la grafica de error vs iteraciones
 function[xk,error]=biseccion(f,a,b,iterMax,tol)
   pkg load symbolic %Invoca a la libreria symbolic
