@@ -1,9 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <tuple>
 #include <cmath>
+#include <ginac/ginac.h>
+#include "matplotlibcpp.h"
 
 using namespace std;
+using namespace GiNaC;
+namespace plt = matplotlibcpp
 
 /**
  * @brief Función no lineal a la que deseamos encontrar solución.
@@ -49,9 +52,19 @@ double calcular_error(double x_k){
  */ 
 bool condicion_parada(double x_k, double x_prev, double tol){
     double val = 10e-8;
-    if (calcular_error(x_k) < tol) return true;             // El ciclo para porque se alcanzo el nivel de tolerancia. 
-    else if (abs(f(x_k) - f(x_prev)) < val) return true;    // El ciclo se interrumpe porque el denominador se acercó demasiado a cero.
+    if (calcular_error(x_k) < tol) return true;              
+    else if (abs(f(x_k) - f(x_prev)) < val) return true;    
     else return false;
+}
+
+
+/**
+ * @brief Grafica el error en funcion de la cantidad de iteraciones.
+ * @param error_set Vector de errores de la aproximacion.
+ */ 
+void plot(vector<double> error_set){
+    
+
 }
 
 
@@ -62,42 +75,33 @@ bool condicion_parada(double x_k, double x_prev, double tol){
  * @param x_1 Valor de la condición inicial x_1.
  * @param tol Valor de la tolerancia de resultado aceptable.
  * @param max_itr Cantidad máxima de iteraciones que se pueden realizar.
- * @return Retorna el valor de la aproximación y un vector con los errores
- * obtenidos en cada iteración.
  */ 
-tuple<double, vector<double>> secante(double x_0, double x_1, double tol, int max_itr=100){
+int secante(double x_0, double x_1, double tol, int max_itr=100){
 
     vector<double> error;
     double x_k = x_1, x_prev = x_0, x_sgt;
     int k = 1;
 
     while (!condicion_parada(x_k, x_prev, tol) && k < max_itr){
-        x_sgt = calcular_sgte_valor(x_k, x_prev);   // Calcula el valor para x_(k+1).
-        x_prev = x_k;                               // Asigna a x_(k-1) = x_k.
-        x_k = x_sgt;                                // Asigna a x_k = x_(k+1).
-        error.push_back(calcular_error(x_k));       // Agrega el error al vector.
+        x_sgt = calcular_sgte_valor(x_k, x_prev);   
+        x_prev = x_k;                               
+        x_k = x_sgt;                                
+        error.push_back(calcular_error(x_k));       
         k++;
     }
 
-    return make_tuple(x_k, error);
+    plot(error);
+
+    return 0;
 }
 
 
-// TODO: Implementar la función que grafique el error
-void plot(){}
+
 
 
 int main(int argc, char const *argv[])
 {
-    tuple<double, vector<double>> r = secante(0.75, 0.5, 10e-8,4);
-
-    double x = get<0>(r);
-    vector<double> error_set = get<1>(r);
-    int k = error_set.size();
-
-    // Resultado
-    cout << "aprox:: " << x << endl;
-    cout << "k:: " << k << endl;
+    
 
     return 0;
 }

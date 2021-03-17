@@ -1,9 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <tuple>
 #include <cmath>
+#include <ginac/ginac.h>
+#include "matplotlibcpp.h"
 
 using namespace std;
+using namespace GiNaC;
+namespace plt = matplotlibcpp;
+
 
 /**
  * @brief Función no lineal a la que deseamos encontrar solución.
@@ -11,7 +15,6 @@ using namespace std;
  * @return Retorna el resultado de evaluar f(x).
  */ 
 double f(double x){
-    // f(x) = cos(x)
     return cos(x)- x; 
 }
 
@@ -39,9 +42,9 @@ double calcular_error(double x_k){
 
 
 /**
- * @brief Determina si se cumple alguna de las condiciones de parada
- * del método iterativo. (1) Se consigue un valor de tolerancia dado.
- * (2) El denominador se aproxima demasiado a cero.
+ * @brief Determina si se cumple alguna de las condiciones de parada del método iterativo. 
+ *          (1) Se consigue un valor de tolerancia dado.
+ *          (2) El denominador se aproxima demasiado a cero.
  * @param x_k Valor actual de la sucesión.
  * @param x_prev Valor anterior de la sucesión x_(k-1).
  * @param tol Valor de tolerancia.
@@ -49,13 +52,17 @@ double calcular_error(double x_k){
  */ 
 bool condicion_parada(double x_k, double x_prev, double tol){
     double val = 10e-8;
-    if (calcular_error(x_k) < tol) return true;             // El ciclo para porque se alcanzo el nivel de tolerancia. 
-    else if (abs(f(x_k) - f(x_prev)) < val) return true;    // El ciclo se interrumpe porque el denominador se acercó demasiado a cero.
+    if (calcular_error(x_k) < tol) return true;             
+    else if (abs(f(x_k) - f(x_prev)) < val) return true;    
     else return false;
 }
 
+
 /**
- * 
+ * @brief Verifica el teorema de bolzano para la función en un intervalo definido.
+ * @param a Valor de inicio del intervalo.
+ * @param b Valor final del intervalo.
+ * @return Verdadero si se cumple el teorema, falso si no.
  */
 bool teorema_bolzano(double a, double b){
     return f(a)*f(b) < 0;
@@ -63,17 +70,25 @@ bool teorema_bolzano(double a, double b){
 
 
 /**
+ * @brief Grafica el error en funcion de la cantidad de iteraciones.
+ * @param error_set Vector de errores de la aproximacion.
+ */ 
+void plot(vector<double> error_set){
+    
+
+}
+
+
+/**
  * @brief Permite encontrar los ceros de una función f(x) de forma iterativa
  * aplicando el método de la falsa posición.
  * @param a Valor de inicio del intervalo.
- * @param x_1 Valor final del intervalo.
+ * @param b Valor final del intervalo.
  * @param tol Valor de la tolerancia de resultado aceptable.
  * @param max_itr Cantidad máxima de iteraciones que se pueden realizar.
- * @return Retorna el valor de la aproximación y un vector con los errores
- * obtenidos en cada iteración.
  */ 
-tuple<double, vector<double>> falsa_posicion(double a, double b, double tol, int max_itr=100){
-    // Primero se verifica el teorema de Bolzano
+int falsa_posicion(double a, double b, double tol, int max_itr=100){
+    
     if (!teorema_bolzano(a,b)){
         throw "[Error 001] La función no cumple con el teorema de Bolzano en el intervalo dado.";
     }
@@ -92,32 +107,22 @@ tuple<double, vector<double>> falsa_posicion(double a, double b, double tol, int
         else if (teorema_bolzano(x_k, b)) a = x_k;
         else {
             cout << "[Error 002] No es posible continuar calculando. No se cumple el teorema de Bolzano." << endl;
-            break;
+            return 1;
         }
         k++;
     }
 
-    return make_tuple(x_k, error);
+    plot(error);
+
+    return 0;
 }
 
 
 int main(int argc, char const *argv[])
 {
-    tuple<double, vector<double>> r = falsa_posicion(0.5, 0.7854, 10e-3, 5);
-
-    double x = get<0>(r);
-    vector<double> error_set = get<1>(r);
-    int k = error_set.size();
-
-    // Resultado
-    cout << "aprox:: " << x << endl;
-    cout << "k:: " << k << endl;
-
-    for(int i = 0; i < k; i++){
-        cout << error_set.at(i) << endl;
-    }
-
+    
     return 0;
 }
 
 // TODO: Función de plot
+// cmd: g++ falsa_posicion.cpp -o prog.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 -lginac -lcln
