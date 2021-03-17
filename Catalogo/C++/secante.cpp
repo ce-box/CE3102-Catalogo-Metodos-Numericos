@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace GiNaC;
-namespace plt = matplotlibcpp
+namespace plt = matplotlibcpp;
 
 /**
  * @brief Función no lineal a la que deseamos encontrar solución.
