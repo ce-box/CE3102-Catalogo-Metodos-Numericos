@@ -92,8 +92,9 @@ void plot(vector<double> x, vector<double> y){
  * @param x_1 Valor de la condición inicial x_1.
  * @param tol Valor de la tolerancia de resultado aceptable.
  * @param max_itr Cantidad máxima de iteraciones que se pueden realizar.
+ * @return Aproximación de la solución a f(x).
  */ 
-int secante(double x_0, double x_1, double tol, int max_itr=100){
+double secante(double x_0, double x_1, double tol, int max_itr=100){
 
     vector<double> error, itr;
     double x_k = x_1, x_prev = x_0, x_sgt;
@@ -114,7 +115,7 @@ int secante(double x_0, double x_1, double tol, int max_itr=100){
 
     plot(itr,error);
 
-    return 0;
+    return x_k;
 }
 
 

@@ -104,7 +104,7 @@ void plot(vector<double> x, vector<double> y){
  * @param tol Valor de la tolerancia de resultado aceptable.
  * @param max_itr Cantidad máxima de iteraciones que se pueden realizar.
  */ 
-int falsa_posicion(double a, double b, double tol, int max_itr=100){
+double falsa_posicion(double a, double b, double tol, int max_itr=100){
     
     if (!teorema_bolzano(a,b)){
         throw "[Error 001] La función no cumple con el teorema de Bolzano en el intervalo dado.";
@@ -136,7 +136,7 @@ int falsa_posicion(double a, double b, double tol, int max_itr=100){
 
     plot(iter,error);
 
-    return 0;
+    return x_k;
 }
 
 
