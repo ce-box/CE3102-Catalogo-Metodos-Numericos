@@ -1,3 +1,9 @@
+/* ------------------------------------------------------------
+ * @file: falsa_posicion.cpp
+ * @dependencias: GiNaC, matplotlibcpp
+ * @version 0.1
+ * ------------------------------------------------------------*/
+
 // [1] $ g++ falsa_posicion.cpp -o fp.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 -lginac -lcln
 // [2] $ ./fp.out
 
