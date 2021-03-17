@@ -103,6 +103,7 @@ void plot(vector<double> x, vector<double> y){
  * @param b Valor final del intervalo.
  * @param tol Valor de la tolerancia de resultado aceptable.
  * @param max_itr Cantidad máxima de iteraciones que se pueden realizar.
+ * @return Aproximación de la solución a f(x).
  */ 
 double falsa_posicion(double a, double b, double tol, int max_itr=100){
     
