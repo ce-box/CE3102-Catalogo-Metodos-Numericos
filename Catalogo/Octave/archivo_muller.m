@@ -7,11 +7,16 @@ function archivo_muller
   x2=1.8;;
   iterMax=5;
   tol=10^-8;
-  muller(f,x0,x1,x2,iterMax,-0.1);%Los argumentos son la funcion, los valores iniciales, el numero total de iteraciones y el valor de tolerancia
+  muller(f,x0,x1,x2,iterMax,-0.1);%Argumentos de la funcion muller
 
 end
 
 %Funcion que realiza el metodo de biseccion
+%f=funcion
+%x0 y x0 = los valores iniciales
+%iterMax = el numero total de iteraciones
+%tol = el valor de tolerancia
+%Muestra la grafica de error vs iteraciones
 function muller(f,x0,x1,x2,iterMax,tol)
   pkg load symbolic%Invoca a la libreria symbolic
   syms x%Define a x como simbolica
@@ -66,7 +71,15 @@ function muller(f,x0,x1,x2,iterMax,tol)
     ylabel("Error");
     
 end
-function [r]=resolver(matr,val,x0,x1,x2)%Funcion que obtendra el valor de las variables del sistema de ecuaciones
+
+
+
+%Funcion que obtendra el valor de las variables del sistema de ecuaciones
+%matr = array matriz A 3x3
+%val = array matriz B 3x1
+%x0, x1 y x2 = valores iniciales
+%retorna el valor de "r"
+function [r]=resolver(matr,val,x0,x1,x2)
   resultado=[];
   resultado=inv(matr)*val;%Operacion de matrices que dara como resultado el valor de las variables del sistema de ecuaciones
   r=obtenerR(resultado(1),resultado(2),resultado(3),x2);%Invoca la funcion "" con la finalidad de obtener el valor de R
@@ -81,8 +94,10 @@ function [r]=obtenerR(a1,b1,c1,x2)%Funcion encargada de calcular el valor de r p
   r=f2(a1,b1,c1,signo,x2);%(a,b,c,s,x)Orden para ingresar las variables y se obtiene el valor de t=r
 end
 
-
-function [signo]=obtenerSig(b)%Funcion para obtener el simbolo de la variable b
+%Funcion para obtener el simbolo de la variable b
+%b = el valor de la variable "b"
+%retorna el valor del signo de b, -1 o 1
+function [signo]=obtenerSig(b)
   signo=0;
   if b<0%Condicion para determinar si b es negativa
     signo=-1;%Si se cumple la condicion se retornara un -1, que al estar multiplicado similara el signo negativo
@@ -91,8 +106,10 @@ function [signo]=obtenerSig(b)%Funcion para obtener el simbolo de la variable b
   end
 end
 
-
-function [t0,t1,t2]=masCercanos(x0,x1,x2,r)%Funcion encargada de determinar que valores estan mas cercanos a R
+%Funcion encargada de determinar que valores estan mas cercanos a R
+%%x0, x1 y x2 = variables iniciales/iteraciones siguientes
+%retorna t0, t1 y t2 = los nuevos valores para las variables a evaluar
+function [t0,t1,t2]=masCercanos(x0,x1,x2,r)
   m0=abs(r-x0);%se realiza una resta entre los valores para determinar quien esta mas cerca
   m1=abs(r-x1);
   m2=abs(r-x2);

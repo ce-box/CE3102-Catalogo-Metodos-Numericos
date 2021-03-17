@@ -9,10 +9,15 @@ function archivo_biseccion
   tol=10^-4;
   iterMax=100;
   %P2: Llamar a la función
-  [xk,error]=biseccion(f,a,b,iterMax,tol)%Los argumentos son la funcion, los valores del intervalo, el numero total de iteraciones y el valor de tolerancia
+  [xk,error]=biseccion(f,a,b,iterMax,tol)%Los argumentos para la funcion biseccion
 end
 
 %Funcion que realiza el metodo de biseccion
+%f=funcion
+%a y b = variables los valores del intervalo
+%iterMax = el numero total de iteraciones
+%tol = el valor de tolerancia
+%Muestra la grafica de error vs iteraciones
 function[xk,error]=biseccion(f,a,b,iterMax,tol)
   pkg load symbolic %Invoca a la libreria symbolic
   sym x;%Define a x como simbolica
@@ -33,7 +38,7 @@ function[xk,error]=biseccion(f,a,b,iterMax,tol)
       k=k+1;%Actualiza iteraciones
       if f(a)*fx<0 %Se verifica la condicion de f(a)*f(x) sea menor a 0  
          b=xk;%Se actualiza el valor de b
-      elseif fx*f(b)<0%Sino verifica la condicion de f(b)*f(x) sea menor a 0  
+      elseif fx*f(b)<0
          a=xk;%Se actualiza el valor de b
       end
       if abs(error)<tol%Condicion de parada
