@@ -9,7 +9,7 @@ function archivo_biseccion
   tol=10^-4;
   iterMax=100;
   %P2: Llamar a la función
-  [xk,error]=biseccion(f,a,b,iterMax,tol)%Los argumentos para la funcion biseccion
+  [xk,error]=biseccion(f,a,b,iterMax,tol);%Los argumentos para la funcion biseccion
 end
 
 %Funcion que realiza el metodo de biseccion
@@ -31,10 +31,7 @@ function[xk,error]=biseccion(f,a,b,iterMax,tol)
       xk=(a+b)/2; %Calculo y actualizacion de la aproximacion
       fx=f(xk);%Valor de la funcion con respecto a la aproximacion
       error=(b-a)/2^k;%Se calcula el error
-      display(['---------------']);
-      display(['iteracion #' num2str(k)]);
-      display(['a:' num2str(a)]);
-      display(['b:' num2str(b)]);
+      
       e=[e error];%Se agrega a la lista el valor de error actual
       k=k+1;%Actualiza iteraciones
       if f(a)*fx<0 %Se verifica la condicion de f(a)*f(x) sea menor a 0  
@@ -50,6 +47,11 @@ function[xk,error]=biseccion(f,a,b,iterMax,tol)
     title ("Biseccion error vs iteraciones");
     xlabel("Iteraciones");
     ylabel("Error");
+    display(['---------------']);
+    display(['Iteracion #' num2str(k)]);
+    display(['Aproximacion:' num2str(xk)]);
+    display(['Error:' num2str(error)]);
+    display(['Lista de errores:' num2str(e)]);
   else%En caso de no cumplir el teorema de bolzano
     x=0;%Se coloca en valor por defecto por el return de la funcion
     error=0;

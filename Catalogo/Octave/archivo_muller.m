@@ -68,7 +68,8 @@ function [r,error]=muller(f,x0,x1,x2,iterMax,tol)
     display(['-------------'])
     display(['Iteracion #' num2str(con)])
     display(['la aproximacion R=' num2str(r)])
-    display(['El error es=' num2str(e)])
+    display(['El error es=' num2str(error)])
+    display(['Lista de errores=' num2str(error)])
     plot(1:con,e);%Se muestra la grafica de ERROR VS Iteraciones de la funcion
     title ("Muller error vs iteraciones");
     xlabel("Iteraciones");
