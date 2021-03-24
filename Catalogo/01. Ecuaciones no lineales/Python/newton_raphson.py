@@ -45,5 +45,7 @@ def newton_raphson(func, xk, tol, iterMax):
     plt.legend(["Error"])
     plt.show() 
 
+    print(xk, np.absolute(y))
     return [xk, np.absolute(y)] #Retorna la aproximación del cero de la función, el error, y la cantidad de iteraciones
     
+newton_raphson("cos(2*x)**2 - x**2", 3/4, 10**(-10), 100)
