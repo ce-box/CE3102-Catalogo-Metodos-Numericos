@@ -13,7 +13,7 @@ function archivo_descenso_coordinado
   %variables=['x','y','z'];
 
   %P2: Llamar a la función
-  [xk,error,e]=coordinado(f,variables,valores,iterMax,tol)%Los argumentos para la funcion biseccion
+  [xk,error,e]=coordinado(f,variables,valores,iterMax,tol)%Los argumentos para la funcion descenso coordinado
 
 end
 
