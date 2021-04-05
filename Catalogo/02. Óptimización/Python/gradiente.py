@@ -1,14 +1,23 @@
-from numpy import linalg, array
+from numpy import linalg, array, absolute
 from sympy import sympify, Symbol, diff
 from matplotlib import pyplot as plt
 
+# Funcion principal
 def gradiente(func, var, xK, tol, iterMax):
+
+    #Función de prueba: (x-2)**4 + (x-2*y)**2", ['x', 'y'], [0, 3], 10**(-10), 13
 
     if len(var) != len(xK):
         return "La lista de variables y de valores iniciales deben ser iguales."
     
+    if tol < 0:
+        return "La tolerancia dada debe ser mayor a cero"
+    
     funtion = sympify(func) #Se traduce el string "func" a una función de sympy
     itr = 1
+
+    D = []
+    A = []
 
     # Se crea la lista de valores simbolicos
     symbolicList = []
@@ -26,7 +35,12 @@ def gradiente(func, var, xK, tol, iterMax):
     for i in gk:
         dk.append(i*-1)
 
+    # Se calcula la norma para el primer valor
+    norma = linalg.norm(array(gk, dtype='float'), 2)
     
+    D.append(itr-1)
+    A.append(round(norma, 4))
+
     while itr <= iterMax:
         # Se calcula el alpha
         ak = calc_ak(funtion, var, xK, dk, gk)
@@ -48,6 +62,9 @@ def gradiente(func, var, xK, tol, iterMax):
         # Se calcula la norma 2 del vector para la condicion de parada
         norma = linalg.norm(array(stop_xk_1, dtype='float'), 2)
 
+        D.append(itr)
+        A.append(round(norma, 4))
+
         # Se verifica la condicion de parada
         if norma < tol:
             break
@@ -62,14 +79,18 @@ def gradiente(func, var, xK, tol, iterMax):
 
         xK = xk_1.copy()
         gk = gk_1.copy()
-        print(xk_1, itr)
+
         itr += 1
-        
 
-   
-    return [xk_1, itr]
+    plt.plot(array(D), array(A))
+    plt.title("Gráfico")
+    plt.legend(["Error"])
+    plt.show() 
+    
+    print(xk_1, round(norma, 4), (itr-1))
+    return [xk_1, round(norma, 4)] #Retorna el Xk(aproximación), y el error
 
-   
+# Evalua el gradiente
 def valueGradient(gradient, variable, values):
 
     n = len(variable)
@@ -88,7 +109,7 @@ def valueGradient(gradient, variable, values):
 
     return value    
 
-
+# Evalua la funcio
 def value_funtion(func, var, xK):
     
     n = len(var)
@@ -97,7 +118,7 @@ def value_funtion(func, var, xK):
         func = func.subs(var[i], xK[i])
     return func
 
-
+# Calcula ak
 def calc_ak (func, var, xK, dK, gK):
 
     # Desigualdad f(xK + aK * dK) - f(xK) <= 0.5 * aK * gK * dK
@@ -145,6 +166,7 @@ def calc_ak (func, var, xK, dK, gK):
 
     return ak
 
+# Calcula bk
 def calc_bk(gk, pre_gk, dk):
     
     # Se calcula la norma 2 del vector actual
@@ -157,7 +179,5 @@ def calc_bk(gk, pre_gk, dk):
     return bk
  
 
-
-if  __name__ == '__main__':
-    gradiente("(x-2)**4 + (x-2*y)**2", ['x', 'y'], [0, 3], 10**(-10), 13) 
+gradiente("(x-2)**4 + (x-2*y)**2", ['x', 'y'], [0, 3], 10**(-10), 13) 
 
