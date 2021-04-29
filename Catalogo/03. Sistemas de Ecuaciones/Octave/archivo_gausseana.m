@@ -27,7 +27,7 @@ function [x]=gausseana(A,b)#Metodo de eliminacion gausseana
     
     [x]=hacia_Atras(A,b,n)#Se calcula la respuesta usando la susticion hacia atras
   else
-    display("La matriz no tiene inversa")
+    error("La matriz no tiene inversa")
   end
 end
 
