@@ -39,7 +39,7 @@ bool is_positive_dependant(mat A){
 vec back_substitution(mat A, vec b){
     int n = A.n_rows;
     vec x(n);
-    x.fill(0);
+    x.zeros();
 
     for (int i = n-1; i >= 0; i--){
         double sum = 0;
@@ -63,7 +63,7 @@ vec back_substitution(mat A, vec b){
 vec forward_substitution(mat A, vec b){
     int n = A.n_rows;
     vec x(n);
-    x.fill(0);
+    x.zeros();
 
     for (int i = 0; i < n; i++){
         double sum = 0;
@@ -77,8 +77,30 @@ vec forward_substitution(mat A, vec b){
 }
 
 
-int main(int argc, char const *argv[])
-{
-    /* code */
+int main(int argc, char const *argv[]){
+
+    // Test sustitución hacia atrás
+    mat A(4,4);
+    A = {{1, 1,-1, 3},
+         {0,-1,-1,-5},
+         {0, 0, 3,13},
+         {0, 0, 0,-13}};
+    vec b(4);
+    b = {4, -7, 13, -13};
+    vec x = back_substitution(A,b);
+    x.print("x(bs): ");
+
+
+    // Test sustitución hacia adelante
+    mat C(5,5);
+    vec d(5);
+    C = {{2, 0, 0, 0, 0},
+         {3, 2, 0, 0, 0},
+         {3,-1,-1, 0, 0},
+         {1, 1, 1, 1, 0},
+         {1, 2, 3,-4, 5}};
+    d = {-8, 10 , 2, 1, 3};
+    x = forward_substitution(C,d);
+    x.print("x(fs): ");
     return 0;
 }
