@@ -32,7 +32,7 @@ function [x]=gausseana(A,b)#Metodo de eliminacion gausseana
 end
 
 #Parametros de entrada
-#A matriz nxn, #b matriz de valores independientes
+#A matriz nxn, #b matriz de valores independientes,#n largo de la matriz
 #Salida
 #A matriz  triangular superior, #b nueva matriz de valores independientes
 #Transforma la matriz A a una triangular superior
@@ -51,7 +51,7 @@ function [A,b]=trian_Sup(A,b,n)
 end
 
 #Parametros de entrada
-#A matriz  triangular superior, #b nueva matriz de valores independientes
+#A matriz  triangular superior, #b nueva matriz de valores independientes,#n largo de la matriz
 #Salida
 #soluciones matriz de soluciones "x#"
 #Susticion hacia atras
