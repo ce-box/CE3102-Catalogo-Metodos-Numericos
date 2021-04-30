@@ -179,55 +179,23 @@ void fact_cholesky(mat A, vec b){
 
 int main(int argc, char const *argv[]){
 
-    // Test sustitución hacia atrás
-    mat A(4,4);
-    A = {{1, 1,-1, 3},
-         {0,-1,-1,-5},
-         {0, 0, 3,13},
-         {0, 0, 0,-13}};
-    vec b(4);
-    b = {4, -7, 13, -13};
-    vec x = back_substitution(A,b);
-    x.print("x(bs): ");
-
-
-    // Test sustitución hacia adelante
-    mat C(5,5);
-    vec d(5);
-    C = {{2, 0, 0, 0, 0},
-         {3, 2, 0, 0, 0},
-         {3,-1,-1, 0, 0},
-         {1, 1, 1, 1, 0},
-         {1, 2, 3,-4, 5}};
-    d = {-8, 10 , 2, 1, 3};
-    x = forward_substitution(C,d);
-    x.print("x(fs): ");
-
-    // Test simetrica
-    mat E(3,3);
-    E = {{4,2,1},
-         {2,5,2},
-         {1,2,6}};
-    cout<<"is E simetric?: "<< is_simetric(E)<< endl;
-
-    // Test diagonal positiva
-    cout<<"Det(E): "<< determinant(E,3)<< endl;
-    cout<<"is E DP?: \n"<< is_positive_definite(E)<< endl;
-
     // Test Cholesky
-    mat M(4,4);
-    vec p(4);
+    mat A(4,4);
+    vec b(4);
 
-    M = {{ 25, 15, -5,-10},
+    A = {{ 25, 15, -5,-10},
          { 15, 10,  1, -7},
          { -5,  1, 21,  4},
          {-10, -7,  4, 18}};
 
-    p = {-25, -19, -21, -5};
+    b = {-25, -19, -21, -5};
 
-    fact_cholesky(M,p);
+    cout << "Factorización Cholesky" << endl;
+    A.print("A:\n");
+    b.print("b:\n");
+    fact_cholesky(A,b);
 
-    // Solución del ejemplo 0> x = [-1, -1, -1, -1]
+    // Solución del ejemplo -> x = [-1, -1, -1, -1]
 
     return 0;
 }
