@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
  * @file: fact_cholesky.cpp
  * @dependencias: None
- * @version 3.0
+ * @version 3.5
  * ------------------------------------------------------------*/
 
 // Compile and run:
@@ -13,17 +13,6 @@
 
 using namespace std;
 using namespace arma;
-
-
-/**
- * @brief Determina si una matriz es cuadrada, es decir, si posee
- *        el mismo número de columnas y filas.
- * @param A Matriz a ser verificada.
- * @return True si la matriz es cuadrada, false si no lo es.
- */ 
-bool is_square(mat A){
-    return A.n_rows == A.n_cols;
-}
 
 
 /**
@@ -86,8 +75,10 @@ bool is_positive_definite(mat A){
     for (int i = 0; i < n; i++){
         mat A_t = A.submat(0,0,i,i);
         double det_result = determinant(A_t,i+1);
-        if (det_result < 0)
+        //cout << "Det(A_t): "<< det_result<< endl;
+        if (det_result < 0){
             return false;
+        }
     }
     return true;
 }
@@ -148,7 +139,39 @@ vec forward_substitution(mat A, vec b){
  * @param b Vector de términos independientes.
  */ 
 void fact_cholesky(mat A, vec b){
-    
+
+    if (is_simetric(A) && is_positive_definite(A)){
+        int n = A.n_rows;
+        mat L(n,n);
+        L.zeros();
+
+        // Calcular la matriz L
+        for (int i = 0; i < n; i++){
+
+            for (int j = 0; j < i+1; j++){
+                double sum = 0;
+
+                if (i == j){
+                    for (int k = 0; k < j; k++)
+                        sum += pow(L(j,k),2);
+                    L(j,j) = sqrt(A(j,j) - sum);
+                } else {
+                    for (int k = 0; k < j; k++)
+                        sum += L(i,k) * L(j,k);
+                    L(i,j) = (A(i,j) - sum) / L(j,j);
+                }
+            }
+        }
+
+        // Resolve Ly=b, para luego solucionar L_t x = y.
+        vec y = forward_substitution(L,b);
+        vec x = back_substitution(L.t(),y);
+
+        // Presentar la solución del Sistema.
+        x.print("x: ");
+
+    } else
+        cout<< "[Error 504] El sistema no cumple  con las condiciones para resolverse por Cholesky."<< endl;
 }
 
 
@@ -189,7 +212,22 @@ int main(int argc, char const *argv[]){
 
     // Test diagonal positiva
     cout<<"Det(E): "<< determinant(E,3)<< endl;
-    cout<<"is E DP?: "<< is_positive_definite(E)<< endl;
+    cout<<"is E DP?: \n"<< is_positive_definite(E)<< endl;
+
+    // Test Cholesky
+    mat M(4,4);
+    vec p(4);
+
+    M = {{ 25, 15, -5,-10},
+         { 15, 10,  1, -7},
+         { -5,  1, 21,  4},
+         {-10, -7,  4, 18}};
+
+    p = {-25, -19, -21, -5};
+
+    fact_cholesky(M,p);
+
+    // Solución del ejemplo 0> x = [-1, -1, -1, -1]
 
     return 0;
 }
