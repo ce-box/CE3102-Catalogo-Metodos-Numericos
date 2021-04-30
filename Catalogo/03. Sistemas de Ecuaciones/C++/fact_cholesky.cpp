@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
  * @file: fact_cholesky.cpp
- * @dependencias: None
- * @version 3.5
+ * @dependencias: armadillo, math
+ * @version 3.6
  * ------------------------------------------------------------*/
 
 // Compile and run:
@@ -175,11 +175,10 @@ void fact_cholesky(mat A, vec b){
 }
 
 
-
-
 int main(int argc, char const *argv[]){
 
     // Test Cholesky
+    // ----------------------------
     mat A(4,4);
     vec b(4);
 
