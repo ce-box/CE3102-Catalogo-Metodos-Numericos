@@ -9,24 +9,89 @@
 // [2] $ ./fc.out
 
 #include <armadillo>
+#include <math.h>
 
 using namespace std;
 using namespace arma;
 
 
-void fact_cholesky(mat A, vec b){
-    
+/**
+ * @brief Determina si una matriz es cuadrada, es decir, si posee
+ *        el mismo número de columnas y filas.
+ * @param A Matriz a ser verificada.
+ * @return True si la matriz es cuadrada, false si no lo es.
+ */ 
+bool is_square(mat A){
+    return A.n_rows == A.n_cols;
 }
 
 
+/**
+ * @brief Verifica que una matriz sea simétrica.
+ * @param A Matriz de tamaño nxn.
+ * @return True si es simétrica, false si no lo es.
+ */ 
 bool is_simetric(mat A){
-    return true;
+    return approx_equal(A, A.t(),"absdiff", 0);
 }
 
 
-bool is_positive_dependant(mat A){
+// Source: https://www.tutorialspoint.com/cplusplus-program-to-compute-determinant-of-a-matrix
+// Nota: Se implementó porque la función de armadillo arma::det(mat) presentó problemas.
+/**
+ * @brief Calcula el determinante de una matriz cuadrada.
+ * @param A Matriz de tamaño nxn.
+ * @param n Tamaño de la matriz.
+ * @return El valor del determinante de la matriz.
+ */ 
+double determinant(mat A, int n) {
+    double det = 0;
+    mat sub_matrix(10,10);
+    
+    if (n == 1){
+        // Caso 0: Si la matriz es de orden 1
+        return A(0,0);
+    } else if (n == 2){
+        // Caso base: Determinante de una matriz 2x2
+        return (A(0,0) * A(1,1) - A(1,0) * A(0,1));
+    } else {
+        // Caso de reducciones de la matriz
+        for (int x = 0; x < n; x++){
+            int sub_i = 0;
+            for (int i = 1; i < n; i++){
+                int sub_j = 0;
+                for (int j = 0; j < n; j++){
+                    if (j == x)
+                        continue;
+                    sub_matrix(sub_i,sub_j) = A(i,j);
+                    sub_j++;
+                }
+                sub_i++;
+            }
+            det += (pow(-1,x)* A(0,x) * determinant(sub_matrix, n-1));
+        }
+    }
+    return det;
+}
+
+
+/**
+ * @brief Determina si una matrix dada es Definida Positiva.
+ * @param A Matriz de tamaño nxn.
+ * @return True si es definida positiva, false si no es.
+ */ 
+bool is_positive_definite(mat A){
+    int n = A.n_rows;
+
+    for (int i = 0; i < n; i++){
+        mat A_t = A.submat(0,0,i,i);
+        double det_result = determinant(A_t,i+1);
+        if (det_result < 0)
+            return false;
+    }
     return true;
 }
+
 
 
 /**
@@ -77,6 +142,18 @@ vec forward_substitution(mat A, vec b){
 }
 
 
+/**
+ * @brief Soluciona un sistema de ecuaciones utilizando la Factorización de Cholesky.
+ * @param A Matriz de coeficientes. Deber ser cuadrada, simétrica y positiva definida.
+ * @param b Vector de términos independientes.
+ */ 
+void fact_cholesky(mat A, vec b){
+    
+}
+
+
+
+
 int main(int argc, char const *argv[]){
 
     // Test sustitución hacia atrás
@@ -102,5 +179,17 @@ int main(int argc, char const *argv[]){
     d = {-8, 10 , 2, 1, 3};
     x = forward_substitution(C,d);
     x.print("x(fs): ");
+
+    // Test simetrica
+    mat E(3,3);
+    E = {{4,2,1},
+         {2,5,2},
+         {1,2,6}};
+    cout<<"is E simetric?: "<< is_simetric(E)<< endl;
+
+    // Test diagonal positiva
+    cout<<"Det(E): "<< determinant(E,3)<< endl;
+    cout<<"is E DP?: "<< is_positive_definite(E)<< endl;
+
     return 0;
 }
