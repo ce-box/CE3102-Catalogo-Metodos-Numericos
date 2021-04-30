@@ -5,8 +5,12 @@ import numpy as np
 def fact_lu(A, b):
     n = A.shape[0]
     m = A.shape[1]
+    t = b.shape[0]
+    o = b.shape[1]
     if (n != m):
         raise ValueError("La matriz no es cuadrada")
+    if t!=n or o!=1:
+        raise ValueError("La matriz b no tiene las dimensiones correctas")
     if(teorema_2_lu(A,n)==False):
         raise ValueError("La matriz no cumple el teorema 2 de Fact LU")
     M = matriz_inf_lu(A, n)
@@ -74,10 +78,10 @@ def hacia_Adelante(A, b, n):
 
 if __name__ == '__main__':
     A = np.matrix('4 -2 1; 20 -7 12;-8 13 17', float)
-    A2 = np.matrix('25 15 -5 -10;15 10 1 -7;-5 1 21 4;-10 -7 4 18')
-    b2 = np.matrix('-25;-19;-21;-5')
-    #teorema_2_lu(matriz, 4)
+    A2 = np.matrix('25 15 -5 -10;15 10 1 -7;-5 1 21 4;-10 -7 4 18',float)
+
     b = numpy.matrix('11;70;17')
+    b2 = np.matrix('-25;-19;-21;-5')
     print("Ejemplo 1 tiene como resultado:")
     print(fact_lu(A, b))
     print("Ejemplo 2 tiene como resultado:")
