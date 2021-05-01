@@ -1,6 +1,6 @@
 function archivo_gauss_seidel
   #Ejemplo para el metodo
-  A3=[1 1 5;1 5 1; 5 1 1]
+  A3=[5 1 1;;1 5 1; 1 1 5]
   b3=[7;7;7]
   [x,error]=gauss_seidel(A3,b3,100,10^-3)#A matriz nxn, #b matriz de valores independientes,#k numero de iteraciones,#tol Toleracion
 
@@ -21,9 +21,12 @@ function [x,error]=gauss_seidel(A,b,k,tol)
   if t!=n | o!=1 #Comprueba que la matriz b tenga las dimensiones correctas
     error("La matriz b no es de las dimensiones correctas");
   endif
+  [VF]=matriz_dominante(A,b,n);#Comprueba que la matriz sea diagonalmente dominante 
+  if VF!=1
+    error("La matriz no es diagonalmente dominante")
+  endif
   
   
-  [A,b]=matriz_dominante(A,b,n)#Comprueba que la matriz sea diagonalmente dominante, y si es posible la corrige 
   
   [L,U,D]=matrices_Jacobi(A,n);#Se obtienes las matrices L U D
   x=zeros(n,1);#Crea la matriz que tendra las respuestas de las iteraciones
@@ -44,7 +47,7 @@ function [x,error]=gauss_seidel(A,b,k,tol)
     endif
   endfor
   plot(1:i,error);#Se grafica error vs iteraciones
-  title ("Gauss Seidel error vs iteraciones")
+  title ("Gauss Seidel error vs iteraciones");
   xlabel("Iteraciones");
   ylabel("Error");
 end
@@ -79,7 +82,7 @@ end
 #soluciones matriz de soluciones "x#"
 #Sustitucion hacia adelante
 function [soluciones]=hacia_Adelante(A,b,n)
-  soluciones=zeros(n,1);#Matriz de solucines 
+  soluciones=zeros(n,1);#Matriz de soluciones 
   soluciones(1)=b(1)/A(1,1);#Primera solucion
   i=2;
   while i<n+1#Mueve las filas   
@@ -97,38 +100,21 @@ end
 #Parametros de entrada
 #A matriz nxn , #b nueva matriz de valores independientes, #n largo de la matriz
 #Salida
-#A matriz corregida, #b matriz valores independientes corregida
+#verificado valor 1 si es diagonalmente dominante, valor 0 si no es diagonalmente dominante
 #Comprueba y corrige la matriz A, a diagonal dominante
-function [A,b]=matriz_dominante(A,b,n)
-  fila=[];#Almacena el numero de fila donde se detecto un error
-  posicion=[]; #Almacena el indice donde se detecto un error
+function [verificado]=matriz_dominante(A,b,n)
+  verificado=1;
   for f=1:n#Mueve filas
-    for c=1:n  #Mueve columnas   
-          if abs(A(f,c)) == max(abs(A(f,:))) && f!=c#Comprueba si el numero es igual al mayor y no se encuenta en la diagonal
-            fila=[fila f];#Se almacena el numero de fila
-            posicion=[posicion c];#Se almacena el indice
-            break;      
-          endif
+    for c=1:n
+      #Mueve columnas   
+      if abs(A(f,c)) == max(abs(A(f,:))) && f!=c#Comprueba si el numero es igual al mayor y no se encuenta en la diagonal
+        verificado=0;
+        break;      
+      endif   
     endfor
+    if verificado==0#Verifica si ya no es d.dominante y detiene el ciclo
+      break;
+    endif
   endfor
-  if isempty(fila)#Se comprueba si la matriz fila esta vacia, si es asi esta es dominante
-    display("dominante");
-    
-  else    #Si no es dominante
-    for k=1:size(posicion,2)
-      if size(find(posicion==posicion(k)),2)>1   #Comprueba si hay 2 o mas filas que tenga el mayor en la misma posicion
-        error("No es posible acomodar la matriz")#si es asi se lanza error porque la matriz no podra corregirse
-      endif
-    endfor
-    display("No es dominante, corrigiendo")
-    N1=A(fila(1),:);     #Algortimo que cambia 2 filas tanto de A y b, para ir corregiendo la matriz
-    N2=A(posicion(1),:);
-    A(posicion(1),:)=N1;
-    A(fila(1),:)=N2;
-    N3=b(fila(1),:);
-    N4=b(posicion(1),:);
-    b(posicion(1),:)=N3;
-    b(fila(1),:)=N4;
-    [A,b]=matriz_dominante(A,b,n);
-  end
+
 end
