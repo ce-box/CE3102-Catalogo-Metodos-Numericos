@@ -2,40 +2,56 @@ import numpy
 import numpy as np
 
 
+#Parametros de entrada
+#A matriz nxn, #b matriz de valores independientes
+#Salida
+#x matriz  de las soluciones
 def fact_lu(A, b):
-    n = A.shape[0]
-    m = A.shape[1]
-    t = b.shape[0]
-    o = b.shape[1]
-    if (n != m):
+    n = A.shape[0]#Obtiene el numero de filas de A
+    m = A.shape[1]#Obtiene el numero de columnas de A
+    t = b.shape[0]#Obtiene el numero de filas de b
+    o = b.shape[1]#Obtiene el numero de columnas de B
+    if n != m:#Comprueba que la matriz sea cuadrada
         raise ValueError("La matriz no es cuadrada")
-    if t!=n or o!=1:
+    if t != n or o!=1:#Comprueba que las matriz b sea las dimensiones adecuadas
         raise ValueError("La matriz b no tiene las dimensiones correctas")
-    if(teorema_2_lu(A,n)==False):
+    if teorema_2_lu(A,n) == False:#Comprueba las submatrices sean invertibles
         raise ValueError("La matriz no cumple el teorema 2 de Fact LU")
-    M = matriz_inf_lu(A, n)
 
-    y = hacia_Adelante(M[1], b, n)
-    x = hacia_Atras(M[0], y, n)
+    M = matriz_inf_lu(A, n)#Obtiene la matriz de inferior y superior en version LU
+
+    y = hacia_Adelante(M[1], b, n)#Resuelve Ly=b
+    x = hacia_Atras(M[0], y, n)#Resuleve Ux=y
     return x
 
-def teorema_2_lu(A, n):
-    Valor = True
+#Parametros de entrada
+#A matriz  cuadrada, #n largo de la matriz
+#Salida
+#Valor booleado que identifica si se cumple o no el teorema 2
+#Evaluacion del Teorema de LU
+def teorema_2_lu(A, n):#Comprueba que las submatrices tiene determinante diferente de 0
+    Valor = True#Booleano que sirve para identificar si se cumplio o no el teorema
     for k in range(0, n):
         if np.linalg.det(A[0:k, 0:k]) == 0:
-            Valor = False
+            Valor = False#Se detiene si una submatriz no cumple el teorema 2
             break
-    return Valor
+    return Valor#True se cumple, #False se incumple
 
+
+#Parametros de entrada
+#A matriz cuadrada, #n largo de la matriz
+#Salida
+#U matriz Triangular superior LU, #L Matriz Triangular inferior LU
+#Matrices inferior y superior version Factorizacion de LU
 def matriz_inf_lu(A,n):
     U=A
     L=np.zeros((n,n))
 
-    for k in range(0,n-1):
-        for i in range(k+1,n):
+    for k in range(0,n-1):#Columnas
+        for i in range(k+1,n):#Filas
             Mik=U[i,k]/U[k,k]
-            L[i,k]=Mik
-            for j in range(k,n):
+            L[i,k]=Mik#Agrega a la matriz los valores ocupuesto a los "Multiplicadores" de la matriz
+            for j in range(k,n):#Ciclo para agregar los nuevos valores de la matriz U
                 U[i,j]=U[i,j]-Mik*U[k,j]
                 if i==j:
                     L[i,j]=1
@@ -43,7 +59,11 @@ def matriz_inf_lu(A,n):
     return U,L
 
 
-
+#Parametros de entrada
+#A matriz  triangular superior, #b nueva matriz de valores independientes, #n largo de la matriz
+#Salida
+#soluciones matriz de soluciones "x#"
+#Sustitucion hacia atras
 def hacia_Atras(A, b, n):
     soluciones = np.zeros((n, 1))
     i = n - 1;
@@ -59,24 +79,30 @@ def hacia_Atras(A, b, n):
     return soluciones
 
 
+#Parametros de entrada
+#A matriz  triangular inferior, #b nueva matriz de valores independientes, #n largo de la matriz
+#Salida
+#soluciones matriz de soluciones "x#"
+#Sustitucion hacia adelante
 def hacia_Adelante(A, b, n):
-    soluciones = np.zeros((n, 1))
-    soluciones[0] = b[0] / A[0, 0]
+    soluciones = np.zeros((n, 1))#Matriz de soluciones
+    soluciones[0] = b[0] / A[0, 0]#Primera solucion
     i = 1;
 
-    while (i < n):
+    while (i < n):#Mueve las filas
         sumatoria = 0
-        for j in range(0, i):
-            sumatoria = sumatoria + (A[i, j] * soluciones[j])
+        for j in range(0, i):#Mueve columnas
+            sumatoria = sumatoria + (A[i, j] * soluciones[j])#Sumatoria necesaria
 
-        x = (b[i] - sumatoria) / A[i, i]
-        soluciones[i] = x
+        x = (b[i] - sumatoria) / A[i, i]#Calcular el valor de la solucion "x"
+        soluciones[i] = x#Agrega la solucion a la matriz de soluciones
         i = i + 1
     return soluciones
 
 
 
 if __name__ == '__main__':
+    #Ejemplos de ingresos de datos
     A = np.matrix('4 -2 1; 20 -7 12;-8 13 17', float)
     A2 = np.matrix('25 15 -5 -10;15 10 1 -7;-5 1 21 4;-10 -7 4 18',float)
 
