@@ -79,7 +79,6 @@ def relajacion(matriz, vector_independiente, valor_inicial, tol, iterMax):
 
         # Se actualiza el valor de X
         valor_inicial = X
-        print(valor_inicial)
 
         # Se comprueba si el error es menor a la tolerancia
         if (error < tol):
@@ -92,6 +91,9 @@ def relajacion(matriz, vector_independiente, valor_inicial, tol, iterMax):
     plt.title("Gráfico")
     plt.legend(["Error"])
     plt.show() 
+
+    print(valor_inicial, error)
+    return [valor_inicial, error]
 
 
 # Parametros de entrada
