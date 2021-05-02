@@ -19,7 +19,20 @@ def relajacion(matriz, vector_independiente, valor_inicial, tol, iterMax):
 
     # Verificar si es cuadrada
     if (n != m):
-        return 'La matriz debe ser cuadrada'
+        raise ValueError('La matriz debe ser cuadrada')
+
+    # Verifica que A sea igual a At
+    if (np.array_equal(matriz, np.transpose(matriz)) != True):
+        raise ValueError('La matriz A no es igual a la matriz At')
+
+    # Verificar si b es del largo de la matriz
+    if (len(b) != m):
+        raise ValueError('La matriz debe ser cuadrada')
+
+    if teorema_2(matriz,n) == False:#Comprueba las submatrices sean invertibles
+        raise ValueError('La matriz no cumple el teorema 2, sus determinantes no son cero')
+
+    
 
     # Calcular la matriz D
     d = cal_matriz_d(matriz, n)
@@ -177,6 +190,20 @@ def hacia_Adelante(A, b, n):
         soluciones[i] = x#Agrega la solucion a la matriz de soluciones
         i = i + 1
     return soluciones
+
+#Parametros de entrada
+#A matriz  cuadrada, #n largo de la matriz
+#Salida
+#Valor booleado que identifica si se cumple o no el teorema 2
+#Evaluacion del Teorema de LU
+def teorema_2(A, n):#Comprueba que las submatrices tiene determinante diferente de 0
+    A = np.matrix(A, float)
+    Valor = True#Booleano que sirve para identificar si se cumplio o no el teorema
+    for k in range(0, n):
+        if np.linalg.det(A[0:k, 0:k]) == 0:
+            Valor = False#Se detiene si una submatriz no cumple el teorema 2
+            break
+    return Valor#True se cumple, #False se incumple
 
 # Valores iniciales
 if __name__ == '__main__':
