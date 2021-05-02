@@ -109,6 +109,22 @@ void jacobi(mat A, vec b, vec x_o, int max_itr=100){
         return;
     }
 
+    mat L = lower_mat(A);
+    mat D = diag_mat(A);
+    mat U = upper_mat(A);
+    
+    vec x = x_o;
+    int k = 0;
+
+    mat T = -(arma::inv(D))*(L+U);
+    vec c = arma::inv(D)*b;
+
+
+    while(k < max_itr){
+        x = T*x + c;
+    }
+
+    x.print("x: ");
 
 }
 
@@ -130,6 +146,11 @@ int main(int argc, char const *argv[])
     D.print("D: ");
     mat L = lower_mat(A);
     L.print("L: ");
+
+    mat M = {{5,1,1},{1,5,1},{1,1,5}};
+    vec b = {7,7,7};
+    vec x_o = {0,0,0};
+    jacobi(M,b,x_o,5);
 
     return 0;
 }
