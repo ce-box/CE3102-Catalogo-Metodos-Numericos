@@ -1,6 +1,7 @@
 import numpy as np
 from sympy import Symbol
 import math
+from matplotlib import pyplot as plt
 
 
 def relajacion(matriz, vector_independiente, valor_inicial, tol, iterMax):
@@ -15,7 +16,6 @@ def relajacion(matriz, vector_independiente, valor_inicial, tol, iterMax):
     n = len(matriz)  # Numero de filas
     m = len(matriz[0])  # Numero de columnas
     iter = 0  # Numero de iteraciones
-    error = 0  # Error de la aproximacion
 
     # Verificar si es cuadrada
     if (n != m):
@@ -53,20 +53,45 @@ def relajacion(matriz, vector_independiente, valor_inicial, tol, iterMax):
 
     # Calculo de C
     C = hacia_Adelante(temp_1, temp_3, n)
-
+    
+    D = []
+    A = []
 
     while (iter <= iterMax):
 
-        if (error > tol):
-            break
 
         temp_2 = np.dot((np.dot((1 - w), d) - np.dot(w, u)), valor_inicial)
 
         T = hacia_Adelante(temp_1, temp_2, n)  # Se calcula T
-        X = T + C
-        iter += 1
+        X = T + C # Se calcula el valor de X+1 
+
+        # Se calcula el error
+        x_actual = 0 
+        x_anterior = 0
+        for i in range(0, n):
+            x_actual += (X[i][0])**2
+            x_anterior += (valor_inicial[i][0])**2
+        error = (math.sqrt(x_actual)-math.sqrt(x_anterior))/math.sqrt(x_actual)
+
+        # Se agregan los valores de error e iteracion 
+        D.append(iter)
+        A.append(error)
+
+        # Se actualiza el valor de X
         valor_inicial = X
         print(valor_inicial)
+
+        # Se comprueba si el error es menor a la tolerancia
+        if (error < tol):
+            break
+
+        iter += 1
+
+    #Grafico de error por iteracion
+    plt.plot(np.array(D), np.array(A))
+    plt.title("Gráfico")
+    plt.legend(["Error"])
+    plt.show() 
 
 
 # Parametros de entrada
@@ -151,7 +176,8 @@ def hacia_Adelante(A, b, n):
         i = i + 1
     return soluciones
 
+# Valores iniciales
 if __name__ == '__main__':
     a = [[4, 3, 0], [3, 4, -1], [0, -1, 4]]
     b = [[7], [7], [-1]]
-    relajacion(a, b, [[0], [0], [0]], 10, 5)
+    relajacion(a, b, [[0], [0], [0]], 10**(-10), 5)
