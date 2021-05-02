@@ -28,13 +28,14 @@ function [Q,R] = fact_qr(A, ind)
       ut = u.' %Calcula transpuesta de u
       num = 2 * u * ut %Calcula 2*u*ut
       den = ut*u %Calcula ut*u
-      H1 = iden - (num/den) %Calcula H1
+      H1 = iden - num/den %Calcula H1
       
-      HA = (H1 * Ar) %Calcula HA = H1*A
+      HA = (H1 * A) %Calcula HA = H1*A
       
       A = HA %Reasigna A
       
     endif
+    
     
     if cont == 2 %Obtiene H2
       
@@ -72,7 +73,7 @@ function [Q,R] = fact_qr(A, ind)
       
       [H3] = obtH3(final, Htecho) %Genera H3
       R = int32(H3*H2*H1*Ar) %Calcula R
-      Q = (H1*H2*H3) %Calcula Q
+      Q = H1*H2*H3 %Calcula Q
       
     endif
     
