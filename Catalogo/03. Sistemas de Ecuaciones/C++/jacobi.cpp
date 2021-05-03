@@ -77,7 +77,7 @@ mat diag_mat(mat A){
 
 
 /**
- * 
+ * @brief Retorna la matriz inferior
  */
 mat lower_mat(mat A){
     int n = A.n_rows;
@@ -95,6 +95,20 @@ mat lower_mat(mat A){
 
 
 /**
+ * @brief Grafica el error en funcion de la cantidad de iteraciones.
+ * @param x Set de valores del eje x.
+ * @param y Set de valores del eje y.
+ */ 
+void plot(vector<double> x, vector<double> y){
+    
+    plt::named_plot("Error |Ax-b|",x,y);
+    plt::title("Error Jacobi");
+    plt::legend();
+    plt::show();
+}
+
+
+/**
  * @brief Calcula la aproximación a la solución de un sistema de ecuaciones por 
  *        el método de Jacobi.
  * @param A Matriz de coeficientes.
@@ -102,7 +116,7 @@ mat lower_mat(mat A){
  * @param x_o Vector de valor inicial.
  * @param max_itr Iteraciones máximas.
  */ 
-void jacobi(mat A, vec b, vec x_o, int max_itr=100){
+void jacobi(mat A, vec b, vec x_o, double tol, int max_itr=100){
 
     if (!dominant_diagonal(A)){
         cout<<"[Error] La matriz no es diagonal dominante."<<endl;
@@ -116,37 +130,27 @@ void jacobi(mat A, vec b, vec x_o, int max_itr=100){
     vec x = x_o;
     int k = 0;
 
-    mat T = -(arma::inv(D))*(L+U);
-    vec c = arma::inv(D)*b;
+    mat T = -D.i()*(L+U);
+    vec c = D.i()*b;
 
+    vector<double> errors, itr;
+    double error = tol;
 
-    while(k < max_itr){
+    while(error > tol && k < max_itr){
         x = T*x + c;
+        error = norm(A*x-b);
+        errors.push_back(error);
+        itr.push_back(k);
+        k++;
     }
 
     x.print("x: ");
-
+    plot(itr,errors);
 }
 
 
 int main(int argc, char const *argv[])
 {
-    mat A = {{-10,  3,  0,  0},
-             {  4, 15,  2,  1},
-             {  3,  8,-21,  4},
-             {  1,  1,  1,  4}};
-
-    // Probar Diagonal Dominante
-    cout<<"is M DD?: "<< dominant_diagonal(A)<<endl;
-    
-    // Probar matrices LDU
-    mat U = upper_mat(A);
-    U.print("U: ");
-    mat D = diag_mat(A);
-    D.print("D: ");
-    mat L = lower_mat(A);
-    L.print("L: ");
-
     mat M = {{5,1,1},{1,5,1},{1,1,5}};
     vec b = {7,7,7};
     vec x_o = {0,0,0};
