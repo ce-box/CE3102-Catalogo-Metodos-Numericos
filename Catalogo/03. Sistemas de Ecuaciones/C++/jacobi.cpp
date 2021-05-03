@@ -6,6 +6,7 @@
 
 // [1] $ g++ jacobi.cpp -o jac.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 
 // [2] $ ./jac.out
+// Nota: Asegurarse de tener armadillo bien instalado.
 
 #include <armadillo>
 #include "matplotlibcpp.h"
