@@ -4,7 +4,7 @@
  * @version 0.1
  * ------------------------------------------------------------*/
 
-// [1] $ g++ secante.cpp -o sec.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 
+// [1] $ g++ secante.cpp -o sec.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 -lginac -lcln
 // [2] $ ./sec.out
 
 #include <iostream>
