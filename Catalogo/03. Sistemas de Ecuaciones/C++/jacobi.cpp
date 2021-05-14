@@ -115,6 +115,7 @@ void plot(vector<double> x, vector<double> y){
  * @param A Matriz de coeficientes.
  * @param b Vector de términos independientes.
  * @param x_o Vector de valor inicial.
+ * @param tol Tolerancia de la aproximación.
  * @param max_itr Iteraciones máximas.
  */ 
 void jacobi(mat A, vec b, vec x_o, double tol, int max_itr=100){
