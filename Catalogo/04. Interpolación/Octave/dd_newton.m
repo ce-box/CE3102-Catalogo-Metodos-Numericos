@@ -22,6 +22,7 @@ end
 %Parametros de entrada
 %puntos -> una matriz (m x 2), sera un matriz que en la columna 1 tenga los valores x, en columna 2 las y 
 %Parametros de salida
+%poli_inter polinomio de interpolacion es tipo symbolic
 function poli_inter = dd_newton(puntos)
   [n, m] = size(puntos);
   if m ~= 2#Comprueba que la lista tenga solo pares ordenados
