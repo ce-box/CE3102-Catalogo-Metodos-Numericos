@@ -40,7 +40,7 @@ def cota_traz_cubico(func, numPuntos):
             print(str(comp) + "\n\n")
             
             if(error < comp): #Si la cota es menor que la el maximo error aceptado
-                print("La cota del error es:" + str(error))
+                print("La cota de error del trazador cubico natural es:" + str(error))
                 return comp
  
             numCont += 1 #Incrementa contador de puntos
