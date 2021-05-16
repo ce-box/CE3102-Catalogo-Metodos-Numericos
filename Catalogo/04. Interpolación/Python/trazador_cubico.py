@@ -48,8 +48,7 @@ def traz_cubico(Xk, Yk):
         d = Yk[i]
         S.append(crear_funcion(a,b,c,d,Xk[i])) 
 
-    print(S)
-    return(S)
+    return([S, h])
         
 def crear_funcion(a,b,c,d,xk):
     x = Symbol('x')
