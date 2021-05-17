@@ -17,23 +17,20 @@ using namespace GiNaC;
 
 
 /**
- * @brief 
+ * @brief Calcula el polinomio Lk (Núcleo de Lagrange).
  * 
- * @param xv 
- * @param k 
- * @return ex 
+ * @param xv Vector de valores de x.
+ * @param k Posición del arreglo que se debe saltar para evitar que el denominador sea cero.
+ * @return ex Polinomio Lk.
  */
 ex lagrange_basis(vector<double> xv, int k){
     
     symbol x("x");
     int n = xv.size();
     ex Lk = 1;
-    //ex xi,xk;
 
     for (int i = 0; i < n; i++){
         if (i != k){
-            //xi = xv[i];
-            //xk = xv[k];
             Lk *= (x - xv[i])/(xv[k] - xv[i]);
         }
     }
@@ -43,11 +40,11 @@ ex lagrange_basis(vector<double> xv, int k){
 
 
 /**
- * @brief 
+ * @brief Calcula el polinomio de interpolación por el método de Lagrange.
  * 
- * @param xv 
- * @param yv 
- * @return ex 
+ * @param xv Vector con valores de x.
+ * @param yv Vector con valores de y.
+ * @return ex Polinomio de interpolación.
  */
 ex lagrange(vector<double> xv, vector<double> yv){
 
@@ -56,7 +53,6 @@ ex lagrange(vector<double> xv, vector<double> yv){
     ex poly = 0;
 
     for (int k = 0; k < n; k++){
-        //ex y = yv[k];
         poly += yv[k] * lagrange_basis(xv,k);
     }
 
