@@ -3,54 +3,68 @@ import numpy as np
 import sys
 from sympy import *
 
+#Parametros de entrada
+#XK vector de puntos de tamano n, #YK vector de imagenes de tamano n
+#Salida
+#S vector de polinomios del trazador cubico
+#Trazador cubico
 def traz_cubico(Xk, Yk):
-    n = len(Xk)
+    n = len(Xk) #Largo del vector
 
-    if (len(Xk) != len(Yk)):
+    if (len(Xk) != len(Yk)): #Comprueba que los vectores sean iguales
         return ('Los venctores no cumplen con la condicion de tamano')
     h = np.zeros(n-1)
 
-    for i in range(0, n-1):
+    for i in range(0, n-1): #Calculo del vector h (distancia entre cada punto
+                            # del trazador)
         h[i] = Xk[i + 1] - Xk[i]
 
-    A = np.zeros((n-2,n-2))
+    A = np.zeros((n-2,n-2)) #Matriz tridiagonal
 
-    A[0][0] = 2*(h[0]+h[1])
+    A[0][0] = 2*(h[0]+h[1]) #Calculo de la primer fila de la matriz n-1xn-1
     A[0][1] = h[1]
 
-    for i in range(1, n-3):
+    for i in range(1, n-3): #Calculo del la de 1 a n-2 de la matriz
         A[i][i] = h[i]
         A[i][i+1] = 2*(h[i] + h[i+1])
         A[i][i+2] = h[i+1]
     
-    A[n-3][n-4] = h[n-3]
+    A[n-3][n-4] = h[n-3]  #Calculo de la posicion n-1 de la matriz
     A[n-3][n-3] = 2*(h[n-3] + h[n-2])
 
-    u = np.zeros(n-2)
+    u = np.zeros(n-2) # Vector de variables u
 
-    for i in range(0, n-2):
+    for i in range(0, n-2): #Calculo del vector u
         u[i] = 6*(((Yk[i+2]-Yk[i+1])/h[i+1])-((Yk[i+1]-Yk[i])/h[i]))
 
-    M_temp = thomas(A,u)
+    M_temp = thomas(A,u) #Implementacion del metodo de Thomas para resolver
+                         #El sistema Ax=U
     M = np.zeros(n)
-    M[0] = 0
+    M[0] = 0 #Matriz M con M0 = 0 y Mn-1 = 0
     M[n-1] = 0
 
-    for i in range(1, n-1):
+    for i in range(1, n-1): #Construccion de la matriz M apartir de la matriz 
+                            #M_temp
         M[i] = M_temp[i-1]
     
-    S = []
+    S = [] #Vector de polinimios de solucion S
     
-    for i in range(0, n-1):
+    for i in range(0, n-1): #Calculo de las variables a,b,c,d
         a = (M[i+1]-M[i])/(6*h[i])
         b = M[i]/2
         c = (Yk[i+1]-Yk[i])/h[i] - (h[i]/6)*(M[i+1]+2*M[i])
         d = Yk[i]
-        S.append(crear_funcion(a,b,c,d,Xk[i])) 
+        S.append(crear_funcion(a,b,c,d,Xk[i])) #Creacion de polinomio Si 
 
     print(S)
     return(S)
-        
+
+#Parametros de entrada
+# a,b,c,d valores del polinimio
+# xk valor de x0
+#Salida
+#polinomio del trazador cubico Si
+#Estructura del polinomio Si   
 def crear_funcion(a,b,c,d,xk):
     x = Symbol('x')
     polinomio = 0
