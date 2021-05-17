@@ -56,6 +56,7 @@ def traz_cubico(Xk, Yk):
         d = Yk[i]
         S.append(crear_funcion(a,b,c,d,Xk[i])) #Creacion de polinomio Si 
 
+    print(S)
     return([S, h])
 
 #Parametros de entrada
