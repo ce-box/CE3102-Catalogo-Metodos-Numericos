@@ -56,15 +56,14 @@ def traz_cubico(Xk, Yk):
         d = Yk[i]
         S.append(crear_funcion(a,b,c,d,Xk[i])) #Creacion de polinomio Si 
 
-    print(S)
-    return(S)
+    return([S, h])
 
 #Parametros de entrada
-# a,b,c,d valores del polinimio
-# xk valor de x0
+#a, b, c, d valores del polinomio
+#Xk constante X0
 #Salida
-#polinomio del trazador cubico Si
-#Estructura del polinomio Si   
+#polinomio Si
+#Polinomio Si
 def crear_funcion(a,b,c,d,xk):
     x = Symbol('x')
     polinomio = 0
