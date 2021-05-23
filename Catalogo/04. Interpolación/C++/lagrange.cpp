@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
  * @file: lagrange.cpp
  * @dependencias: GiNaC
- * @version 0.1
+ * @version 0.5
  * ------------------------------------------------------------*/
 
 // [1] $ g++ lagrange.cpp -o lg.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 -lginac -lcln
