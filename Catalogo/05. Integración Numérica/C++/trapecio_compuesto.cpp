@@ -15,20 +15,44 @@
 using namespace std;
 using namespace GiNaC;
 
+symbol x("x");
+ex func;
+
+/**
+ * @brief Evalua la función en un valor x
+ * 
+ * @param x_ Variable independiente (Real).
+ * @return Retorna el resultado de evaluar f(x).
+ */ 
+double f(double x_){
+    ex x_k = x_;
+    ex result = evalf(subs(func,x==x_k));
+    return ex_to<numeric>(result).to_double(); 
+}
 
 
-void trapecio_compuesto(ex f, double a, double b, int m){
+/**
+ * @brief 
+ * 
+ * @param fx 
+ * @param a 
+ * @param b 
+ * @param m 
+ */
+void trapecio_compuesto(ex fx, double a, double b, int m){
 
-    symbol x("x");
+    func = fx;
     double h = (b - a)/(m-1);
     
-    double x_prev = a, x_n;
+    double x_o = a; 
+    double x_prev = x_o;
+    double x_n;
+    
     double sum = 0;
 
-    for (int n = 0; n < m; n++ ){
-        x_n = x_prev + n*h;
-        sum += f.subs(x == x_prev) + f.subs(x == x_n);
-        
+    for (int n = 1; n < m; n++ ){
+        x_n = x_o + n*h;
+        sum += f(x_prev) + f(x_n);
         x_prev = x_n;
     }
 
@@ -45,6 +69,7 @@ double cota_error(){
 
 int main(int argc, char const *argv[])
 {
-    /* code */
+    ex f = log(x);
+    trapecio_compuesto(f,2,5,4);
     return 0;
 }
