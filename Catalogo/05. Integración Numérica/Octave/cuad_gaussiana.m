@@ -11,6 +11,12 @@ function archivo_cuad_gaussiana
   [error,aprox]=cuad_gaussiana(f,orden,intervalo)#Ejemplo de como se llama al a funcion
 end
 
+
+%Funcion que realiza el metodo de cuadratura gaussiana
+%Parametros de entrada
+%f -> funcion a evaluar, %invervalo -> Valores a y b donde se evaluara el metodo, %orden -> orden de derivada
+%Parametros de salida
+%aprox -> valor de la aproximacion con el metodo trapecio, %error -> valor de la cota de error
 function [error,aprox]=cuad_gaussiana(f,orden,intervalo)
   f=sym(f);
   x=sym('x');
@@ -24,6 +30,11 @@ function [error,aprox]=cuad_gaussiana(f,orden,intervalo)
   
 end 
 
+%Funcion que realiza el metodo auxiliar de la cuadratura gaussiana
+%Parametros de entrada
+%f -> funcion a evaluar, %n -> orden de derivada
+%Parametros de salida
+%aprox -> valor de la aproximacion con el metodo trapecio, %error -> valor de la cota de error
 function [I]=cuad_gaussiana_aux(f,n)
   f1=matlabFunction(f);#Convierte la funcion a tipo matlab
   switch n#Valores de la derivada ya definidos segun el orden
