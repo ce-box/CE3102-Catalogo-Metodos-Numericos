@@ -101,7 +101,8 @@ void trapecio_compuesto(ex fx, double a, double b, int m){
     double result = h/2 * sum;
     double error = cota_error(a,b,h);
 
-    cout << " I = " << result << endl;
+    cout << "f(x) = " << func << endl;
+    cout << "I = " << result << endl;
     cout << "Error: " << error << endl;
 
 }
