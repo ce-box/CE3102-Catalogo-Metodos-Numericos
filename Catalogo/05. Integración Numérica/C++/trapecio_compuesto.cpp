@@ -32,14 +32,15 @@ double f(double x_){
 
 
 /**
- * @brief 
+ * @brief Regla compuesta del trapecio para la calcular la integra de una función.
  * 
- * @param fx 
- * @param a 
- * @param b 
- * @param m 
+ * @param fx Función a integrar con variable x.
+ * @param a  Límite inferior.
+ * @param b  Límite superior.
+ * @param m  Cantidad de puntos a utilizar
+ * @return Resultado númerico de la integral.
  */
-void trapecio_compuesto(ex fx, double a, double b, int m){
+double trapecio_compuesto(ex fx, double a, double b, int m){
 
     func = fx;
     double h = (b - a)/(m-1);
@@ -58,7 +59,7 @@ void trapecio_compuesto(ex fx, double a, double b, int m){
 
     double result = h/2 * sum;
 
-    cout << " I = " << result << endl;
+    return result;
 }
 
 
@@ -70,6 +71,7 @@ double cota_error(){
 int main(int argc, char const *argv[])
 {
     ex f = log(x);
-    trapecio_compuesto(f,2,5,4);
+    double result = trapecio_compuesto(f,2,5,4);
+    cout << " I = " << result << endl;
     return 0;
 }
