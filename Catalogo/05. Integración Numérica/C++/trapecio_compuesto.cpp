@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------
  * @file: trapecio_compuesto.cpp
  * @dependencias: GiNaC
- * @version 0.1
+ * @version 2.1
  * ------------------------------------------------------------*/
 
 // [1] $ g++ trapecio_compuesto.cpp -o trp_cmp.out -std=c++11 -I/usr/include/python3.8 -lpython3.8 -lginac -lcln
@@ -32,15 +32,56 @@ double f(double x_){
 
 
 /**
+ * @brief Evalua la función en un valor x
+ * 
+ * @param fx Función que se evaluará.
+ * @param x_ Variable independiente (Real).
+ * @return Retorna el resultado de evaluar f(x).
+ */ 
+double f(double x_, ex fx){
+    ex x_k = x_;
+    ex result = evalf(subs(fx,x==x_k));
+    return ex_to<numeric>(result).to_double(); 
+}
+
+
+/**
+ * @brief Calcula la cota de error de la regla del trapecio compuesto
+ * 
+ * @param a  Límite inferior.
+ * @param b  Límite superior.
+ * @param h  Intervalo entre puntos.
+ * @return El valor de la cota de error. 
+ */
+double cota_error(double a, double b, double h){
+    
+    ex d2_fx = abs(func.diff(x,2));
+    double d2_fx_num;
+
+    // Calcular el punto máximo de la función
+    double d_fa = f(a,d2_fx);
+    double d_fb = f(b, d2_fx);
+
+    if (d_fa > d_fb){
+        d2_fx_num = d_fa;
+    } else {
+        d2_fx_num = d_fb;
+    }
+
+    double error = ((b-a) * std::pow(h,2) / 12)* d2_fx_num;
+    return error;
+}
+
+
+/**
  * @brief Regla compuesta del trapecio para la calcular la integra de una función.
  * 
  * @param fx Función a integrar con variable x.
  * @param a  Límite inferior.
  * @param b  Límite superior.
  * @param m  Cantidad de puntos a utilizar
- * @return Resultado númerico de la integral.
  */
-double trapecio_compuesto(ex fx, double a, double b, int m){
+void trapecio_compuesto(ex fx, double a, double b, int m){
 
     func = fx;
     double h = (b - a)/(m-1);
@@ -58,20 +99,19 @@ double trapecio_compuesto(ex fx, double a, double b, int m){
     }
 
     double result = h/2 * sum;
+    double error = cota_error(a,b,h);
 
-    return result;
+    cout << " I = " << result << endl;
+    cout << "Error: " << error << endl;
+
 }
 
 
-double cota_error(){
-    return 0;
-}
-
-
+// Ejemplo. P10 [Ejemplo 36/47]
 int main(int argc, char const *argv[])
 {
     ex f = log(x);
-    double result = trapecio_compuesto(f,2,5,4);
-    cout << " I = " << result << endl;
+    trapecio_compuesto(f,2,5,4);
+    
     return 0;
 }
