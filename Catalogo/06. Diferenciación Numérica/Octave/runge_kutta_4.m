@@ -1,30 +1,54 @@
-function runge_kutta_4
-  clc;
+function runge_kutta_4 ()
   pkg load symbolic
+  clc;
   warning('off','all');
   display("------------- MÉTODO RUNGE-KUTTA ORDEN 4 -------------");
-  f = "-x*y + 4*x/y";
+  
+  syms x y
+  f = -x*y + 4*x/y
   y0 = 1;
   a = 0;
   b = 1;
   N = 11;
+  
+  % Calcula los puntos y genera los pares ordenados
   [x,y] = RK2(f,a,b,y0,N);
-  %polinomio = dd_newton([x,y]);
+  puntos = [];
+  for k=1:N
+    puntos = [puntos; x(k) y(k)];
+  endfor
+  
+  % Muestra los puntos y el polinomio de interpolación
   display("Puntos:");
   for k=1:N
     display(["\t(",num2str(x(k)) ,",",num2str(y(k)),")"]);
   endfor
-  %display(["Polinomio de interpolación: ", polinomio]);
+  display("Polinomio de interpolación: ");
+  polinomio = dd_newton(puntos)
+  
+  % Grafica los puntos, el polinomio y la solución exacta
+  stem(x,y,'blue')
+  hold on
+  ezplot(polinomio,[a,b],'red')
+  
+  
 end
 
 
+% Metodo de Runge-Kutta para aproximar la solucion de un problema de valor inicial
+    % :param str_funcion: string con la funcion que se debe evaluar
+    % :param a: Extremo inferior del intervalo
+    % :param b: Extremo superior del intervalo
+    % :param n: Cantidad de puntos
+    % :param y: Valor de y para el x inicial
+    % :return [xv,yv]: Set de puntos (x,y) de la solución dy/dx = y(x)
 function [xv,yv] = RK2(f,a,b,y0,N)
   
   h = (b-a)/(N-1);
   xv = a:h:b;
   yv = zeros(1,N);
   
-  f1 = matlabFunction(sym(f));
+  f1 = matlabFunction(f);
   
   yv(1) = y0;
   
@@ -39,6 +63,10 @@ function [xv,yv] = RK2(f,a,b,y0,N)
 end
 
 
+ % Diferencias Divididas de Newton para resolver un problema de interpolacion
+    % :param puntos: Los puntos deben ser ingresados en una lista, donde cada punto
+    % es una lista, donde la primera posicion es el x, y la segunda posicion es el y. [x, y]
+    % :return: Polinomio de interpolacion obtenido
 function poli_inter = dd_newton(puntos)
   [n, m] = size(puntos);
   if m ~= 2
