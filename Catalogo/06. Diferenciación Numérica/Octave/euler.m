@@ -8,9 +8,17 @@ function archivo_euler
   yinicial=0.5
   pasosh=11
   display("\nSe obtiene:\n ")
-  [pares,poli]=euler(f,intervalo,yinicial,pasosh)
+  [pares,poli]=euler(f,intervalo,yinicial,pasosh)#Ejemplo de ingreso de datos
 
 end
+
+
+%Funcion que realiza el metodo de Euler
+%Parametros de entrada
+%f -> funcion a evaluar, intervalo ->Valor del rango donde se evaluara el metodo
+%yinicial -> Valor inicial de 'y', pasosh -> cantidad de puntos
+%Parametros de salida
+%pares -> Pares x y, %poli -> polinomio de interpolacion es tipo symbolic
 function [pares,poli]=euler(f,intervalo,yinicial,pasosh)
   a=intervalo(1);#Separto los extremos
   b=intervalo(2);
@@ -27,18 +35,11 @@ function [pares,poli]=euler(f,intervalo,yinicial,pasosh)
   end
   
   pares=[xk' yk'];#Se crea la lista de pares ordenados
-  poli2=polinomio(f,h);
   poli=dd_newton(pares);#Se crea el polinomio de interpolacion por el metodo de Diferencias Divididas de Newton
   poli_g=matlabFunction(poli);#Se vuelve tipo matlab
   ezplot(poli_g,intervalo);#Se hace el plot del polinomio de interpolacion en el invertavalo 
   hold on
   stem(xk,yk)#Se colocan los puntos del polinomio en la grafica
-end
-
-function ysiguiente=polinomio(f,h)
-  x=sym('x');
-  y=sym('y');
-  ysiguiente=y+h*sym(f);
 end
 
 %Funcion que realiza el metodo de Diferencias Divididas de Newton
